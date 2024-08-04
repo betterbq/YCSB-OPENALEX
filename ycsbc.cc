@@ -17,15 +17,21 @@
 #include "core/core_workload.h"
 #include "db/db_factory.h"
 #include <unistd.h>
+<<<<<<< HEAD
 #include <stdlib.h>
 #include <climits>
+=======
+>>>>>>> 9a2d8c221191754e3f8abbfd0b37a96cc11bffa1
 #include "core/FileKeyValueGenerator.h"
 
 using namespace std;
 
 bool load_openalex = false;
+<<<<<<< HEAD
 int load_nums = INT_MAX;
 int read_nums = INT_MAX;
+=======
+>>>>>>> 9a2d8c221191754e3f8abbfd0b37a96cc11bffa1
 string openalex_directory;
 
 long long CalculatePercentile(const std::vector<long long>& latencies, double percentile) {
@@ -46,6 +52,7 @@ int DelegateClient(ycsbc::DB *db, ycsbc::CoreWorkload *wl, const int num_ops,
   db->Init();
   ycsbc::Client client(*db, *wl);
 
+<<<<<<< HEAD
   if (load_openalex) {
       if (is_loading) {
           int count = 0;
@@ -88,6 +95,24 @@ int DelegateClient(ycsbc::DB *db, ycsbc::CoreWorkload *wl, const int num_ops,
 
 
 
+=======
+  if (load_openalex) { //makefile 记的改
+      int count = 0;
+      try {
+          FileKeyValueGenerator fileGenerator(openalex_directory);
+          while (fileGenerator.HasNext()) {
+              std::pair<std::string, std::string> kv = fileGenerator.Next();
+              count += client.DoInsertOpenalex(kv);
+              std::cout << kv.first << "\t" << count << std::endl;
+          }
+      } catch (const std::exception &ex) {
+          std::cerr << "Error: " << ex.what() << std::endl;
+          return 1;
+      }
+      return count;
+  }
+
+>>>>>>> 9a2d8c221191754e3f8abbfd0b37a96cc11bffa1
   int oks = 0;
   int batch_num = 120;
   int next_report_=100;
@@ -184,7 +209,11 @@ int main(const int argc, const char *argv[]) {
   const int num_threads = stoi(props.GetProperty("threadcount", "1"));
   std::cout<<"-------------------------Load OPENALEX-------------------------"<<std::endl;
   if (load_openalex == true) {
+<<<<<<< HEAD
       int total_ops = load_nums;
+=======
+      int total_ops = 0;
+>>>>>>> 9a2d8c221191754e3f8abbfd0b37a96cc11bffa1
       utils::Timer<double> time_openalex;
       vector<future<int>> actual_ops;
       time_openalex.Start();
@@ -201,6 +230,7 @@ int main(const int argc, const char *argv[]) {
       double duration_load = time_openalex.End();
       cerr <<endl<< "# Transaction throughput (KTPS)" << endl;
       cerr << sum / duration_load / 1000 <<endl;
+<<<<<<< HEAD
 
       std::cout<<"-------------------------READ OPENALEX-------------------------"<<std::endl;
 
@@ -232,6 +262,8 @@ int main(const int argc, const char *argv[]) {
       std::cout<<"-------------------------Finish OPENALEX Result-------------------------"<<std::endl;
 
 
+=======
+>>>>>>> 9a2d8c221191754e3f8abbfd0b37a96cc11bffa1
   } else {// load_openalex != true
       std::cout<<"-------------------------Load YCSB-------------------------"<<std::endl;
       // Loads data
@@ -241,7 +273,11 @@ int main(const int argc, const char *argv[]) {
       timer_load.Start();
       for (int i = 0; i < num_threads; ++i) {
           actual_ops.emplace_back(async(launch::async,
+<<<<<<< HEAD
                                         DelegateClient, db, &wl, total_ops / num_threads, false));
+=======
+                                        DelegateClient, db, &wl, total_ops / num_threads, true));
+>>>>>>> 9a2d8c221191754e3f8abbfd0b37a96cc11bffa1
       }
       assert((int)actual_ops.size() == num_threads);
 
@@ -430,6 +466,7 @@ string ParseCommandLine(int argc, const char *argv[], utils::Properties &props) 
         if (openalex_directory.back() != '/') openalex_directory += '/';
         argindex++;
     }
+<<<<<<< HEAD
     else if (strcmp(argv[argindex], "load_nums") == 0) {
         argindex++;
         if (argindex >= argc) {
@@ -448,6 +485,8 @@ string ParseCommandLine(int argc, const char *argv[], utils::Properties &props) 
         read_nums = stoi(argv[argindex]);
         argindex++;
     }
+=======
+>>>>>>> 9a2d8c221191754e3f8abbfd0b37a96cc11bffa1
 
     else if (strcmp(argv[argindex], "-P") == 0) {
       argindex++;

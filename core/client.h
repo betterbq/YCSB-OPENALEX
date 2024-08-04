@@ -20,7 +20,10 @@ class Client {
  public:
   Client(DB &db, CoreWorkload &wl) : db_(db), workload_(wl) { }
   virtual  bool DoInsertOpenalex(std::pair<std::string, std::string>& kv);
+<<<<<<< HEAD
   inline int DoBatchReadOpenalex(std::vector<std::string>& keys, int batch_num);
+=======
+>>>>>>> 9a2d8c221191754e3f8abbfd0b37a96cc11bffa1
   virtual bool DoInsert();
   virtual int DoTransaction(int batch_num);
   
@@ -47,12 +50,15 @@ inline bool Client::DoInsertOpenalex(std::pair<std::string, std::string>& kv) {
 
 }
 
+<<<<<<< HEAD
 inline int Client::DoBatchReadOpenalex(std::vector<std::string>& keys, int batch_num) {
     const std::string &table = workload_.NextTable();
     return db_.BatchRead(table, keys, batch_num);
 }
 
 
+=======
+>>>>>>> 9a2d8c221191754e3f8abbfd0b37a96cc11bffa1
 inline bool Client::DoInsert() {
   std::string key = workload_.NextSequenceKey();
   std::vector<DB::KVPair> pairs;
